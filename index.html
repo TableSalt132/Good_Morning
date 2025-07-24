@@ -15,6 +15,7 @@
       transition: background 1s;
       text-align: center;
       flex-direction: column;
+      padding: 20px;
     }
 
     h1 {
@@ -26,6 +27,15 @@
     .emoji {
       font-size: 5rem;
       animation: float 3s ease-in-out infinite;
+    }
+
+    .quote {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      max-width: 80%;
+      color: inherit;
+      font-style: italic;
+      opacity: 0.85;
     }
 
     @keyframes fadeIn {
@@ -53,6 +63,7 @@
   <div id="content">
     <div class="emoji" id="emoji">☀️</div>
     <h1 id="greeting">Good Morning</h1>
+    <p id="quote" class="quote"></p>
   </div>
 
   <script>
@@ -60,19 +71,36 @@
     const greeting = document.getElementById('greeting');
     const emoji = document.getElementById('emoji');
     const body = document.body;
+    const quoteElement = document.getElementById("quote");
+
+    const quotes = [
+      "Start your day with a smile and positive thoughts.",
+      "Success is the sum of small efforts repeated daily.",
+      "The secret of getting ahead is getting started.",
+      "Your only limit is your mind.",
+      "Today is a new chance to be amazing.",
+      "Make today count, one step at a time.",
+      "Great things never come from comfort zones.",
+      "Wake up with determination, go to bed with satisfaction."
+    ];
 
     if (hour >= 6 && hour < 18) {
       // Morning time
       greeting.textContent = "Good Morning";
       emoji.textContent = "☀️";
       body.classList.add('morning');
+
+      const today = new Date();
+      const daysSinceEpoch = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
+      const quoteIndex = daysSinceEpoch % quotes.length;
+      quoteElement.textContent = quotes[quoteIndex];
     } else {
       // Night time
       greeting.textContent = "Now I am going to sleep, Good Night";
       emoji.textContent = "🌙";
       body.classList.add('night');
+      quoteElement.style.display = "none"; // Hide quote at night
     }
   </script>
 </body>
-    </html>
-    
+</html>
