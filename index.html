@@ -16,6 +16,7 @@
       text-align: center;
       flex-direction: column;
       padding: 20px;
+      overflow: hidden;
     }
 
     h1 {
@@ -57,9 +58,42 @@
       background: linear-gradient(to top right, #0f2027, #203a43, #2c5364);
       color: #fff;
     }
+
+    /* 🌟 Night Stars */
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite ease-in-out;
+      opacity: 0.8;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    #content {
+      z-index: 1; /* keep content above stars */
+    }
   </style>
 </head>
 <body>
+  <div class="stars" id="starsContainer"></div>
+
   <div id="content">
     <div class="emoji" id="emoji">☀️</div>
     <h1 id="greeting">Good Morning</h1>
@@ -72,6 +106,7 @@
     const emoji = document.getElementById('emoji');
     const body = document.body;
     const quoteElement = document.getElementById("quote");
+    const starsContainer = document.getElementById("starsContainer");
 
     const quotes = [
       "Start your day with a smile and positive thoughts.",
@@ -84,8 +119,19 @@
       "Wake up with determination, go to bed with satisfaction."
     ];
 
+    function createStars(count = 100) {
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.animationDuration = (1 + Math.random() * 2) + "s";
+        starsContainer.appendChild(star);
+      }
+    }
+
     if (hour >= 6 && hour < 18) {
-      // Morning time
+      // Morning mode
       greeting.textContent = "Good Morning";
       emoji.textContent = "☀️";
       body.classList.add('morning');
@@ -94,12 +140,16 @@
       const daysSinceEpoch = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
       const quoteIndex = daysSinceEpoch % quotes.length;
       quoteElement.textContent = quotes[quoteIndex];
+
+      starsContainer.style.display = "none";
     } else {
-      // Night time
+      // Night mode
       greeting.textContent = "Now I am going to sleep, Good Night";
       emoji.textContent = "🌙";
       body.classList.add('night');
-      quoteElement.style.display = "none"; // Hide quote at night
+
+      quoteElement.style.display = "none";
+      createStars(100);
     }
   </script>
 </body>
